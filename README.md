@@ -5,7 +5,7 @@ a task management plugin for nvim
 ## setup
 
 set the `root_dir` option with where you want the `/.jibun/` directory to live: `require("jibun").setup({ root_dir = "~" })`  
-find suggested setup below:
+find suggested setup using lazy below:
 
 ```lua
 {
