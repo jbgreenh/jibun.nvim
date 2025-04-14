@@ -74,3 +74,8 @@ find suggested setup below:
 }
 
 ```
+
+### roadmap
+
+- add a delete function
+- add a way for users to add custom queries
