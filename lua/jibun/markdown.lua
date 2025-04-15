@@ -236,10 +236,10 @@ function M.highlight_table_rows()
 					if ddatetime <= now then
 						vim.api.nvim_buf_add_highlight(buf, ns_id, "jibun.urgent", line_index, 0, -1)
 					elseif ddatetime - now <= 60 * 60 * 24 * warn_days then
-						vim.api.nvim_buf_add_highlight(buf, ns_id, "jibun.warn", line_index, 0, -1)
+						vim.api.nvim_buf_add_highlight(buf, ns_id, "jibun.upcoming", line_index, 0, -1)
 					end
 				elseif comp == "TRUE" then
-					vim.api.nvim_buf_add_highlight(buf, ns_id, "jibun.ok", line_index, 0, -1)
+					vim.api.nvim_buf_add_highlight(buf, ns_id, "jibun.complete", line_index, 0, -1)
 				end
 			end
 		end
