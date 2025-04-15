@@ -3,6 +3,7 @@ local M = {}
 ---@type Config
 M.default = {
 	root_dir = vim.fn.stdpath("data") .. "/jibun",
+	warn_days = 7,
 }
 
 ---@type Config

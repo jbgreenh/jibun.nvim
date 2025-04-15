@@ -12,9 +12,11 @@
 
 ---@class Config
 ---@field root_dir string
+---@field warn_days number
 
 ---@class ConfigOptional
 ---@field root_dir? string
+---@field warn_days number
 
 ---@alias FilterOperator
 ---| 'equal'
