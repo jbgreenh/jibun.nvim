@@ -292,6 +292,36 @@ function M.head(todos, n)
 	return top_n_todos
 end
 
+---@param jibun_csv_path string
+---@param todos Todo[]
+local function update_jibun_csv(jibun_csv_path, todos)
+	local file = io.open(jibun_csv_path, "w")
+	if not file then
+		vim.notify("couldn't open todo.csv for writing", vim.log.levels.ERROR)
+		return
+	end
+
+	file:write(jibun_csv_headers)
+	for _, todo in ipairs(todos) do
+		file:write(
+			string.format(
+				"%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
+				todo.n or "",
+				todo.complete or "",
+				todo.task or "",
+				todo.tags or "",
+				todo.created or "",
+				todo.due or "",
+				todo.completed or "",
+				todo.notes or "",
+				todo.modified or ""
+			)
+		)
+	end
+
+	file:close()
+end
+
 ---@param todos Todo[]
 ---@param header_name "n"|"complete"|"task"|"tags"|"created"|"due"|"completed"|"notes"|"modified"
 function M.update_under_cursor(todos, header_name)
@@ -394,32 +424,7 @@ function M.update_under_cursor(todos, header_name)
 		end
 	end
 
-	-- update the csv file
-	local file = io.open(jibun_csv_path, "w")
-	if not file then
-		vim.notify("couldn't open todo.csv for writing", vim.log.levels.ERROR)
-		return
-	end
-
-	file:write(jibun_csv_headers)
-	for _, todo in ipairs(todos) do
-		file:write(
-			string.format(
-				"%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
-				todo.n or "",
-				todo.complete or "",
-				todo.task or "",
-				todo.tags or "",
-				todo.created or "",
-				todo.due or "",
-				todo.completed or "",
-				todo.notes or "",
-				todo.modified or ""
-			)
-		)
-	end
-
-	file:close()
+	update_jibun_csv(jibun_csv_path, todos)
 
 	M.refresh_jibun()
 end
@@ -485,32 +490,7 @@ function M.add(todos)
 
 	table.insert(todos, new_todo)
 
-	-- update csv
-	local file = io.open(jibun_csv_path, "w")
-	if not file then
-		vim.notify("couldn't open jibun.csv for writing", vim.log.levels.ERROR)
-		return
-	end
-
-	file:write(jibun_csv_headers)
-	for _, todo in ipairs(todos) do
-		file:write(
-			string.format(
-				"%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
-				todo.n,
-				todo.complete,
-				todo.task,
-				todo.tags or "",
-				todo.created,
-				todo.due or "",
-				todo.completed or "",
-				todo.notes or "",
-				todo.modified or ""
-			)
-		)
-	end
-
-	file:close()
+	update_jibun_csv(jibun_csv_path, todos)
 
 	M.refresh_jibun()
 
