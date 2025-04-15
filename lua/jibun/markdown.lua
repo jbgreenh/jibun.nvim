@@ -153,6 +153,12 @@ end
 
 ---@type integer
 local ns_id = vim.api.nvim_create_namespace("jibun_md_highlights")
+local warn = vim.api.nvim_get_hl(0, { name = "DiagnosticWarn" })
+local error = vim.api.nvim_get_hl(0, { name = "DiagnosticWarn" })
+local ok = vim.api.nvim_get_hl(0, { name = "DiagnosticWarn" })
+vim.api.nvim_set_hl(ns_id, "jibun.urgent", { foreground = error.fg })
+vim.api.nvim_set_hl(ns_id, "jibun.upcoming", { foreground = warn.fg })
+vim.api.nvim_set_hl(ns_id, "jibun.complete", { foreground = ok.fg })
 
 -- highlight rows based on completion status and due dates
 ---@return nil
@@ -215,12 +221,12 @@ function M.highlight_table_rows()
 					local now = os.time()
 					local warn_days = config.current.warn_days
 					if ddatetime <= now then
-						vim.api.nvim_buf_add_highlight(buf, ns_id, "constant", line_index, 0, -1)
+						vim.api.nvim_buf_add_highlight(buf, ns_id, "jibun.urgent", line_index, 0, -1)
 					elseif ddatetime - now <= 60 * 60 * 24 * warn_days then
-						vim.api.nvim_buf_add_highlight(buf, ns_id, "Conditional", line_index, 0, -1)
+						vim.api.nvim_buf_add_highlight(buf, ns_id, "jibun.warn", line_index, 0, -1)
 					end
 				elseif comp == "TRUE" then
-					vim.api.nvim_buf_add_highlight(buf, ns_id, "comment", line_index, 0, -1)
+					vim.api.nvim_buf_add_highlight(buf, ns_id, "jibun.ok", line_index, 0, -1)
 				end
 			end
 		end
