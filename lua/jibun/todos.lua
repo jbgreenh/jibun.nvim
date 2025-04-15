@@ -563,7 +563,7 @@ function M.refresh_jibun()
 			.. "## queries\n"
 			.. "- all todos: "
 			.. all_link
-			.. "- last 20"
+			.. "- last 20: "
 			.. last_20_link
 			.. "- recently completed: "
 			.. rec_link
