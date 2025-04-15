@@ -169,9 +169,9 @@ local urgent_fg = get_hl_fg("DiagnosticError", 0xFF0000)
 local upcoming_fg = get_hl_fg("DiagnosticWarn", 0xFFFF00)
 local complete_fg = get_hl_fg("DiagnosticOk", 0x008000)
 
-vim.api.nvim_set_hl(ns_id, "jibun.urgent", { fg = urgent_fg })
-vim.api.nvim_set_hl(ns_id, "jibun.upcoming", { fg = upcoming_fg })
-vim.api.nvim_set_hl(ns_id, "jibun.complete", { fg = complete_fg })
+vim.api.nvim_set_hl(0, "jibun.urgent", { fg = urgent_fg })
+vim.api.nvim_set_hl(0, "jibun.upcoming", { fg = upcoming_fg })
+vim.api.nvim_set_hl(0, "jibun.complete", { fg = complete_fg })
 
 -- highlight rows based on completion status and due dates
 ---@return nil
