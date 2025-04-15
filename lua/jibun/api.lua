@@ -38,7 +38,7 @@ function M.open_jibun()
 		vim.cmd.edit(jibun_md_path)
 	else
 		todo.refresh_jibun()
-		vim.cmd.edit(jibun_md_path)
+		vim.cmd("edit! " .. jibun_md_path)
 	end
 end
 

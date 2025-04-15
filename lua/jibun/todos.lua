@@ -16,6 +16,8 @@ function M.read_jibun_csv()
 		vim.fn.mkdir(vim.fn.fnamemodify(jibun_csv_path, ":h"), "p")
 		file = assert(io.open(jibun_csv_path, "w"))
 		file:write(jibun_csv_headers)
+		file:close()
+		file = assert(io.open(jibun_csv_path, "r"))
 	end
 
 	local contents = file:read("*a")
@@ -413,7 +415,6 @@ function M.update_under_cursor(todos, header_name)
 	file:close()
 
 	M.refresh_jibun()
-	vim.cmd(":e")
 end
 
 ---@param todos Todo[]
@@ -505,7 +506,6 @@ function M.add(todos)
 	file:close()
 
 	M.refresh_jibun()
-	vim.cmd(":e")
 
 	vim.notify("added new todo #" .. new_todo.n, vim.log.levels.INFO)
 end
@@ -513,9 +513,7 @@ end
 function M.refresh_jibun()
 	local jibun_dir = config.current.root_dir .. "/.jibun/"
 	local jibun_md_path = jibun_dir .. "jibun.md"
-	vim.notify("refreshing 自分...", vim.log.levels.INFO, {
-		timeout = 1000,
-	})
+	vim.notify("refreshing 自分...", vim.log.levels.INFO)
 	local headers, todos = M.read_jibun_csv()
 	assert(headers)
 
@@ -554,6 +552,7 @@ function M.refresh_jibun()
 			.. rec_link
 	)
 	file:close()
+	vim.cmd(":e")
 end
 
 return M

@@ -51,6 +51,8 @@ end
 ---@return boolean
 function M.make_new_notes_md(notes_path, todo)
 	if vim.fn.filereadable(notes_path) == 0 then
+		local dir = vim.fn.fnamemodify(notes_path, ":h")
+		vim.fn.mkdir(dir, "p")
 		local file = io.open(notes_path, "w")
 		if file then
 			-- calculate relative path to jibun.md
@@ -82,6 +84,8 @@ end
 ---@param title string
 ---@return boolean
 function M.make_new_query_md(headers, todos, query_path, title)
+	local dir = vim.fn.fnamemodify(query_path, ":h")
+	vim.fn.mkdir(dir, "p")
 	local file = io.open(query_path, "w")
 	if file then
 		local lines = M.create_markdown_table(headers, todos, query_path)
