@@ -18,7 +18,10 @@ find suggested setup using lazy below:
 {
 	"jbgreenh/jibun.nvim",
 	config = function()
-		require("jibun").setup({ root_dir = "~" })
+		require("jibun").setup({
+            root_dir = "~",
+            warn_days = 7, -- default
+        })
 	end,
 	keys = {
 		{
