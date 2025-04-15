@@ -153,12 +153,25 @@ end
 
 ---@type integer
 local ns_id = vim.api.nvim_create_namespace("jibun_md_highlights")
-local warn = vim.api.nvim_get_hl(0, { name = "DiagnosticWarn" })
-local error = vim.api.nvim_get_hl(0, { name = "DiagnosticError" })
-local ok = vim.api.nvim_get_hl(0, { name = "DiagnosticOk" })
-vim.api.nvim_set_hl(ns_id, "jibun.urgent", { foreground = error.fg })
-vim.api.nvim_set_hl(ns_id, "jibun.upcoming", { foreground = warn.fg })
-vim.api.nvim_set_hl(ns_id, "jibun.complete", { foreground = ok.fg })
+
+---@param hl_group string
+---@param default integer
+---@return integer
+local function get_hl_fg(hl_group, default)
+	local ok, hl = pcall(vim.api.nvim_get_hl, 0, { name = hl_group })
+	if not ok then
+		return default
+	end
+	return hl.fg or default
+end
+
+local urgent_fg = get_hl_fg("DiagnosticError", 0xFF0000)
+local upcoming_fg = get_hl_fg("DiagnosticWarn", 0xFFFF00)
+local complete_fg = get_hl_fg("DiagnosticOk", 0x008000)
+
+vim.api.nvim_set_hl(ns_id, "jibun.urgent", { fg = urgent_fg })
+vim.api.nvim_set_hl(ns_id, "jibun.upcoming", { fg = upcoming_fg })
+vim.api.nvim_set_hl(ns_id, "jibun.complete", { fg = complete_fg })
 
 -- highlight rows based on completion status and due dates
 ---@return nil
