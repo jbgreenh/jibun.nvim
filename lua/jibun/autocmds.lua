@@ -1,8 +1,4 @@
-local config = require("jibun.config")
-
 local M = {}
-
-local jibun_dir = config.current.root_dir .. "/.jibun/"
 
 function M.setup()
 	local jibun = vim.api.nvim_create_augroup("jibun", { clear = true })
@@ -10,7 +6,7 @@ function M.setup()
 	-- highlight and refresh on relevant files
 	vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost" }, {
 		group = jibun,
-		pattern = { jibun_dir .. "jibun.md", jibun_dir .. "/query/*.md" },
+		pattern = { "*/.jibun/jibun.md", "*/.jibun/query/*.md" },
 		callback = function()
 			require("jibun.todos").refresh_jibun()
 			require("jibun.markdown").highlight_table_rows()
