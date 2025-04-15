@@ -211,7 +211,7 @@ function M.highlight_table_rows()
 				local ddatetime = os.time({ year = ddate.year, month = ddate.month, day = ddate.day })
 				local line_index = i - 1
 
-				if comp == "FALSE" and ddate_str then
+				if comp == "FALSE" and ddate_str ~= "" then
 					local now = os.time()
 					local warn_days = config.current.warn_days
 					if ddatetime <= now then
