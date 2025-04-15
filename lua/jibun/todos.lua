@@ -285,10 +285,9 @@ end
 ---@param n number
 ---@return Todo[] top_n_todos
 function M.head(todos, n)
-	local top_n_todos = {}
 	local max_index = math.min(n, #todos)
 
-	top_n_todos = vim.list_slice(todos, 1, max_index)
+	local top_n_todos = vim.list_slice(todos, 1, max_index)
 
 	return top_n_todos
 end
