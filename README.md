@@ -74,6 +74,13 @@ find suggested setup using lazy below:
 			end,
 			desc = "add todo",
 		},
+        {
+            "<leader>jx",
+            function()
+                require("jibun").remove_under_cursor()
+            end,
+            desc = 'remove todo',
+        }
 	},
 }
 
@@ -81,5 +88,5 @@ find suggested setup using lazy below:
 
 ### planned features
 
-- add a delete function
+- add a delete function [complete]
 - add a way for users to add custom queries
