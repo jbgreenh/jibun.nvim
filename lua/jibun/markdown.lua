@@ -211,12 +211,12 @@ function M.highlight_table_rows()
 				local ddatetime = os.time({ year = ddate.year, month = ddate.month, day = ddate.day })
 				local line_index = i - 1
 
-				if comp == "FALSE" and ddatetime then
+				if comp == "FALSE" and ddate_str then
 					local now = os.time()
 					local warn_days = config.current.warn_days
-					if ddatetime - now < 60 * 60 * 24 then
+					if ddatetime <= now then
 						vim.api.nvim_buf_add_highlight(buf, ns_id, "constant", line_index, 0, -1)
-					elseif ddatetime - now < 60 * 60 * 24 * warn_days then
+					elseif ddatetime - now <= 60 * 60 * 24 * warn_days then
 						vim.api.nvim_buf_add_highlight(buf, ns_id, "Conditional", line_index, 0, -1)
 					end
 				elseif comp == "TRUE" then
