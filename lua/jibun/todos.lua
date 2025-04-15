@@ -535,7 +535,7 @@ function M.refresh_jibun()
 	local last_todos = M.sort(todos, "n", { desc = true })
 	last_todos = M.head(last_todos, 20)
 	markdown.make_new_query_md(headers, last_todos, last_20_path, "last 20")
-	local last_20_link = "[last_20.md](query/last_20.md)"
+	local last_20_link = "[last_20.md](query/last_20.md)\n"
 	----recently completed
 	local rec_path = jibun_dir .. "query/recently_completed.md"
 	local rec_todos = M.sort(todos, "completed", { desc = true })
