@@ -151,14 +151,12 @@ function M.select(headers, todos, selected_headers)
 	return new_headers, new_todos
 end
 
----@param headers string[]
 ---@param todos Todo[]
 ---@param header_name HeaderName
 ---@param operator FilterOperator
 ---@param value string|number|nil
----@return string[] headers
 ---@return Todo[] filtered
-function M.filter(headers, todos, header_name, operator, value)
+function M.filter(todos, header_name, operator, value)
 	local filtered = {}
 
 	local property = header_name:lower()
@@ -213,16 +211,14 @@ function M.filter(headers, todos, header_name, operator, value)
 		end
 	end
 
-	return headers, filtered
+	return filtered
 end
 
----@param headers string[]
 ---@param todos Todo[]
 ---@param header_name HeaderName
 ---@param opts? { desc?: boolean }
----@return string[] headers
 ---@return Todo[] sorted_todos
-function M.sort(headers, todos, header_name, opts)
+function M.sort(todos, header_name, opts)
 	opts = opts or {}
 	local desc = opts.desc or false
 	local property = header_name:lower()
@@ -282,7 +278,19 @@ function M.sort(headers, todos, header_name, opts)
 		end
 	end)
 
-	return headers, sorted_todos
+	return sorted_todos
+end
+
+---@param todos Todo[]
+---@param n number
+---@return Todo[] top_n_todos
+function M.head(todos, n)
+	local top_n_todos = {}
+	local max_index = math.min(n, #todos)
+
+	top_n_todos = vim.list_slice(todos, 1, max_index)
+
+	return top_n_todos
 end
 
 ---@param todos Todo[]
@@ -522,22 +530,29 @@ function M.refresh_jibun()
 	local all_path = jibun_dir .. "query/all.md"
 	markdown.make_new_query_md(headers, todos, all_path, "all todos")
 	local all_link = "[all.md](query/all.md)\n"
+	---last 20
+	local last_20_path = jibun_dir .. "query/last_20.md"
+	local last_todos = M.sort(todos, "n", { desc = true })
+	last_todos = M.head(last_todos, 20)
+	markdown.make_new_query_md(headers, last_todos, last_20_path, "last 20")
+	local last_20_link = "[last_20.md](query/last_20.md)"
 	----recently completed
 	local rec_path = jibun_dir .. "query/recently_completed.md"
-	local rec_headers, rec_todos = M.sort(headers, todos, "completed", { desc = true })
-	rec_headers, rec_todos = M.filter(rec_headers, rec_todos, "completed", "gte", "1/1/1000")
-	markdown.make_new_query_md(rec_headers, rec_todos, rec_path, "recently completed")
+	local rec_todos = M.sort(todos, "completed", { desc = true })
+	rec_todos = M.filter(rec_todos, "completed", "gte", "1/1/1000")
+	rec_todos = M.head(rec_todos, 20)
+	markdown.make_new_query_md(headers, rec_todos, rec_path, "recently completed")
 	local rec_link = "[recently_completed.md](query/recently_completed.md)\n"
 
 	-- jibun
 	local file = assert(io.open(jibun_md_path, "w"))
 
 	---- in progress
-	local ip_headers, ip_todos = M.filter(headers, todos, "complete", "equal", "FALSE")
-	ip_headers, ip_todos = M.sort(ip_headers, ip_todos, "n", { desc = true })
-	ip_headers, ip_todos = M.sort(ip_headers, ip_todos, "due")
-	ip_headers, ip_todos = M.select(ip_headers, ip_todos, { "n", "complete", "task", "tags", "due", "notes" })
-	local lines = markdown.create_markdown_table(ip_headers, ip_todos)
+	local ip_todos = M.filter(todos, "complete", "equal", "FALSE")
+	ip_todos = M.sort(ip_todos, "n", { desc = true })
+	ip_todos = M.sort(ip_todos, "due")
+	local ip_headers, ips_todos = M.select(headers, ip_todos, { "n", "complete", "task", "tags", "due", "notes" })
+	local lines = markdown.create_markdown_table(ip_headers, ips_todos)
 	local in_prog = "## in progress\n" .. table.concat(lines, "\n")
 
 	-- write to jibun.md
@@ -548,6 +563,8 @@ function M.refresh_jibun()
 			.. "## queries\n"
 			.. "- all todos: "
 			.. all_link
+			.. "- last 20"
+			.. last_20_link
 			.. "- recently completed: "
 			.. rec_link
 	)
