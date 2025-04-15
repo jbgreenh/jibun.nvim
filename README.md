@@ -5,7 +5,7 @@ a task management plugin for nvim
 ## setup
 
 set the `root_dir` option with where you want the `/.jibun/` directory to live: `require("jibun").setup({ root_dir = "~" })`  
-set the `warn_days` option to set how long before the due date todos should be highlighted  
+set the `warn_days` option to set how long before the due date todos should be highlighted (defaults to 7)  
 find suggested setup using lazy below:
 
 ```lua
