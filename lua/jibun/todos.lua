@@ -497,6 +497,50 @@ function M.add(todos)
 	vim.notify("added new todo #" .. new_todo.n, vim.log.levels.INFO)
 end
 
+---@param todos Todo[]
+function M.delete_todo_under_cursor(todos)
+	local jibun_dir = config.current.root_dir .. "/.jibun/"
+	local jibun_csv_path = jibun_dir .. "jibun.csv"
+	local line_num = vim.api.nvim_win_get_cursor(0)[1]
+	local line = vim.api.nvim_buf_get_lines(0, line_num - 1, line_num, false)[1]
+
+	if not line or not line:match("^|") then
+		vim.notify("not on a todo item row", vim.log.levels.WARN)
+		return
+	end
+
+	local fields = {}
+	for field in line:gmatch("|([^|]+)") do
+		table.insert(fields, vim.trim(field))
+	end
+	local todo_n = fields[1]
+
+	if not todo_n or not tonumber(todo_n) then
+		vim.notify("couldn't find todo number in this row", vim.log.levels.WARN)
+		return
+	end
+
+	local found_index
+	for i, todo in ipairs(todos) do
+		if todo.n == todo_n then
+			found_index = i
+			break
+		end
+	end
+
+	if not found_index then
+		vim.notify("todo #" .. todo_n .. " not found in jibun.csv", vim.log.levels.WARN)
+		return
+	end
+
+	table.remove(todos, found_index)
+
+	update_jibun_csv(jibun_csv_path, todos)
+
+	M.refresh_jibun()
+	vim.notify("deleted todo #" .. todo_n, vim.log.levels.INFO)
+end
+
 function M.refresh_jibun()
 	local jibun_dir = config.current.root_dir .. "/.jibun/"
 	local jibun_md_path = jibun_dir .. "jibun.md"

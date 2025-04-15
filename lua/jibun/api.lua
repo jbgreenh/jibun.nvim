@@ -31,6 +31,15 @@ function M.add_todo()
 	todo.add(todos)
 end
 
+-- delete a todo
+function M.remove_under_cursor()
+	if not util.in_jibun_file() and not util.in_query_file() then
+		return
+	end
+	local _, todos = todo.read_jibun_csv()
+	todo.delete_todo_under_cursor(todos)
+end
+
 -- open jibun.md
 function M.open_jibun()
 	local jibun_md_path = config.current.root_dir .. "/.jibun/jibun.md"
