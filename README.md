@@ -10,12 +10,9 @@ find suggested setup using lazy below:
 
 ```lua
 {
-    "jbgreenh/jibun.nvim",
+	"jbgreenh/jibun.nvim",
 	config = function()
-		require("jibun").setup({
-            root_dir = "~",
-            warn_days = 7, -- default
-        })
+		require("jibun").setup({ root_dir = "~" })
 	end,
 	keys = {
 		{
@@ -74,13 +71,13 @@ find suggested setup using lazy below:
 			end,
 			desc = "add todo",
 		},
-        {
-            "<leader>jx",
-            function()
-                require("jibun").remove_under_cursor()
-            end,
-            desc = 'remove todo',
-        }
+		{
+			"<leader>jx",
+			function()
+				require("jibun").remove_under_cursor()
+			end,
+			desc = "remove todo",
+		},
 	},
 }
 
