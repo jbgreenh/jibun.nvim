@@ -207,15 +207,16 @@ function M.highlight_table_rows()
 			if #columns >= math.max(complete_col, due_col) then
 				local comp = columns[complete_col]:upper()
 				local ddate_str = columns[due_col]
-				local ddate = utils.parse_date(ddate_str)
+				local ddate = os.date("*t", utils.parse_date(ddate_str))
+				local ddatetime = os.time({ year = ddate.year, month = ddate.month, day = ddate.day })
 				local line_index = i - 1
 
-				if comp == "FALSE" and ddate then
+				if comp == "FALSE" and ddatetime then
 					local now = os.time()
 					local warn_days = config.current.warn_days
-					if ddate - now < 60 * 60 * 24 then
+					if ddatetime - now < 60 * 60 * 24 then
 						vim.api.nvim_buf_add_highlight(buf, ns_id, "constant", line_index, 0, -1)
-					elseif ddate - now < 60 * 60 * 24 * warn_days then
+					elseif ddatetime - now < 60 * 60 * 24 * warn_days then
 						vim.api.nvim_buf_add_highlight(buf, ns_id, "Conditional", line_index, 0, -1)
 					end
 				elseif comp == "TRUE" then
