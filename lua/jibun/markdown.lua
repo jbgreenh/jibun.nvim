@@ -154,8 +154,8 @@ end
 ---@type integer
 local ns_id = vim.api.nvim_create_namespace("jibun_md_highlights")
 local warn = vim.api.nvim_get_hl(0, { name = "DiagnosticWarn" })
-local error = vim.api.nvim_get_hl(0, { name = "DiagnosticWarn" })
-local ok = vim.api.nvim_get_hl(0, { name = "DiagnosticWarn" })
+local error = vim.api.nvim_get_hl(0, { name = "DiagnosticError" })
+local ok = vim.api.nvim_get_hl(0, { name = "DiagnosticOk" })
 vim.api.nvim_set_hl(ns_id, "jibun.urgent", { foreground = error.fg })
 vim.api.nvim_set_hl(ns_id, "jibun.upcoming", { foreground = warn.fg })
 vim.api.nvim_set_hl(ns_id, "jibun.complete", { foreground = ok.fg })
