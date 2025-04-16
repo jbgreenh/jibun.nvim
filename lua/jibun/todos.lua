@@ -2,7 +2,7 @@ local utils = require("jibun.utils")
 local markdown = require("jibun.markdown")
 local config = require("jibun.config")
 
-local jibun_csv_headers = "n,complete,task,tags,created,due,completed,notes,modified\n"
+local jibun_csv_headers = "n|complete|task,tags|created|due|completed|notes|modified\n"
 
 local M = {}
 
@@ -29,7 +29,7 @@ function M.read_jibun_csv()
 
 	for i, line in ipairs(vim.split(contents, "[\r\n]+")) do
 		if #line > 0 then -- skip empty lines
-			local fields = vim.split(line, ",%s*")
+			local fields = vim.split(line, "|%s*")
 			if i == 1 then
 				headers = fields
 			else
@@ -305,7 +305,7 @@ local function update_jibun_csv(jibun_csv_path, todos)
 	for _, todo in ipairs(todos) do
 		file:write(
 			string.format(
-				"%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
+				"%s|%s|%s|%s|%s|%s|%s|%s|%s\n",
 				todo.n or "",
 				todo.complete or "",
 				todo.task or "",
