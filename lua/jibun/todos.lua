@@ -2,7 +2,7 @@ local utils = require("jibun.utils")
 local markdown = require("jibun.markdown")
 local config = require("jibun.config")
 
-local jibun_csv_headers = "n|complete|task,tags|created|due|completed|notes|modified\n"
+local jibun_csv_headers = "n|complete|task|tags|created|due|completed|notes|modified\n"
 
 local M = {}
 
@@ -76,6 +76,7 @@ function M.read_jibun_csv()
 		end
 	end
 
+	P(headers)
 	return headers, todos
 end
 
