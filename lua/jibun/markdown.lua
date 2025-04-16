@@ -51,7 +51,9 @@ end
 ---@return boolean
 function M.make_new_notes_md(notes_path, todo)
 	if vim.fn.filereadable(notes_path) == 0 then
-		local dir = vim.fn.fnamemodify(notes_path, ":h")
+		local dir_path = config.current.root_dir .. "/.jibun/notes/"
+		local notes_rel_path = notes_path:sub(#dir_path + 1)
+		local dir = vim.fn.fnamemodify(notes_rel_path, ":h")
 		vim.fn.mkdir(dir, "p")
 		local file = io.open(notes_path, "w")
 		if file then
