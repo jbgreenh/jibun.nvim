@@ -56,12 +56,13 @@ function M.make_new_notes_md(notes_path, todo)
 		local file = io.open(notes_path, "w")
 		if file then
 			-- calculate relative path to jibun.md
-			local jibun_dir = config.current.root_dir .. "/.jibun/"
-			local notes_rel_path = notes_path:sub(#jibun_dir + 2)
-			local notes_base = "notes/"
-			local rel_to_notes = notes_rel_path:sub(#notes_base + 1)
-			local dir_depth = #vim.split(vim.fn.fnamemodify(rel_to_notes, ":h"), "/")
-
+			notes_path = notes_path:gsub("^/", "")
+			local path_h = vim.fn.fnamemodify(notes_path, ":h")
+			local dir_depth = #vim.split(path_h, "/")
+			vim.notify("dir_depth: " .. dir_depth)
+			if path_h == "." then
+				dir_depth = 0
+			end
 			local backlink = string.rep("../", dir_depth + 1) .. "jibun.md"
 
 			local content = "# " .. todo.task .. "\n" .. string.format("[back to jibun.md](%s)\n\n", backlink)
