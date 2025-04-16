@@ -53,13 +53,14 @@ function M.make_new_notes_md(notes_path, todo)
 	if vim.fn.filereadable(notes_path) == 0 then
 		local dir_path = config.current.root_dir .. "/.jibun/notes/"
 		local notes_rel_path = notes_path:sub(#dir_path + 1)
-		local dir = vim.fn.fnamemodify(notes_rel_path, ":h")
+		vim.notify("notes_rel_path: " .. notes_rel_path)
+		local dir = vim.fn.fnamemodify(notes_path, ":h")
 		vim.fn.mkdir(dir, "p")
 		local file = io.open(notes_path, "w")
 		if file then
 			-- calculate relative path to jibun.md
-			notes_path = notes_path:gsub("^/", "")
-			local path_h = vim.fn.fnamemodify(notes_path, ":h")
+			notes_rel_path = notes_rel_path:gsub("^/", "")
+			local path_h = vim.fn.fnamemodify(notes_rel_path, ":h")
 			local dir_depth = #vim.split(path_h, "/")
 			vim.notify("dir_depth: " .. dir_depth)
 			if path_h == "." then
