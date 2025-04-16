@@ -76,7 +76,6 @@ function M.read_jibun_csv()
 		end
 	end
 
-	P(headers)
 	return headers, todos
 end
 

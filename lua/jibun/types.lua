@@ -16,7 +16,7 @@
 
 ---@class ConfigOptional
 ---@field root_dir? string
----@field warn_days number
+---@field warn_days? number
 
 ---@alias FilterOperator
 ---| 'equal'
