@@ -322,6 +322,13 @@ local function update_jibun_csv(jibun_csv_path, todos)
 	file:close()
 end
 
+---@param text string
+---@return string cleaned
+local function clean_inputs(text)
+	local cleaned = text:gsub("|", "/")
+	return cleaned
+end
+
 ---@param todos Todo[]
 ---@param header_name "n"|"complete"|"task"|"tags"|"created"|"due"|"completed"|"notes"|"modified"
 function M.update_under_cursor(todos, header_name)
@@ -373,7 +380,7 @@ function M.update_under_cursor(todos, header_name)
 		end
 		todo_to_update.modified = os.date("%m/%d/%Y")
 	elseif lower_header == "due" then
-		local date_str = vim.fn.input("due date (m/d/Y): ", todo_to_update.due or "")
+		local date_str = clean_inputs(vim.fn.input("due date (m/d/Y): ", todo_to_update.due or ""))
 		if date_str == "" then
 			todo_to_update.due = ""
 		else
@@ -385,7 +392,7 @@ function M.update_under_cursor(todos, header_name)
 		end
 		todo_to_update.modified = os.date("%m/%d/%Y")
 	elseif lower_header == "notes" then
-		local notes_input = vim.fn.input("enter notes or md file name: ")
+		local notes_input = clean_inputs(vim.fn.input("enter notes or md file name: "))
 		if notes_input ~= "" then
 			if notes_input:match("%.md$") then
 				local dir_path = jibun_dir .. "notes/"
@@ -403,21 +410,21 @@ function M.update_under_cursor(todos, header_name)
 		todo_to_update.modified = os.date("%m/%d/%Y")
 	elseif lower_header == "task" then
 		local current_task = todo_to_update.task or ""
-		local new_task = vim.fn.input("enter task: ", current_task)
+		local new_task = clean_inputs(vim.fn.input("enter task: ", current_task))
 		if new_task ~= "" then
 			todo_to_update.task = new_task
 			todo_to_update.modified = os.date("%m/%d/%Y")
 		end
 	elseif lower_header == "tags" then
 		local current_tags = todo_to_update.tags or ""
-		local new_tags = vim.fn.input("enter tag(s): ", current_tags)
+		local new_tags = clean_inputs(vim.fn.input("enter tag(s): ", current_tags))
 		todo_to_update.tags = new_tags
 		todo_to_update.modified = os.date("%m/%d/%Y")
 	else
 		-- default case for other fields
 		-- shouldn't get here
 		local current_value = todo_to_update[lower_header] or ""
-		local new_value = vim.fn.input(string.format("enter new %s: ", header_name), current_value)
+		local new_value = clean_inputs(vim.fn.input(string.format("enter new %s: ", header_name), current_value))
 		if new_value ~= "" then
 			todo_to_update[lower_header] = new_value
 			todo_to_update.modified = os.date("%m/%d/%Y")
@@ -454,15 +461,15 @@ function M.add(todos)
 		modified = os.date("%m/%d/%Y"),
 	}
 
-	new_todo.task = vim.fn.input("enter task: ")
+	new_todo.task = clean_inputs(vim.fn.input("enter task: "))
 	if new_todo.task == "" then
 		vim.notify("cancelled...", vim.log.levels.INFO)
 		return
 	end
 
-	new_todo.tags = vim.fn.input("enter tags: ")
+	new_todo.tags = clean_inputs(vim.fn.input("enter tags: "))
 
-	local due_input = vim.fn.input("enter due date (m/d/Y): ")
+	local due_input = clean_inputs(vim.fn.input("enter due date (m/d/Y): "))
 	if due_input ~= "" then
 		if utils.parse_date(due_input) then
 			new_todo.due = due_input
@@ -471,7 +478,7 @@ function M.add(todos)
 		end
 	end
 
-	local notes_input = vim.fn.input("enter notes or md file name: ")
+	local notes_input = clean_inputs(vim.fn.input("enter notes or md file name: "))
 	if notes_input ~= "" then
 		if notes_input:match("%.md$") then
 			local dir_path = jibun_dir .. "notes/"
